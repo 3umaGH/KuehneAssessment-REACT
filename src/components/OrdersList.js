@@ -99,8 +99,8 @@ const OrdersList = () => {
         Header: "Actions",
         Cell: ({ cell }) => (
           <div className="actions">
-            <button onClick={() => openModal(cell.row.id)}>Edit</button>
-            <button onClick={() => deleteOrder(cell.row.values.orderNo)}>
+            <button className={styles.button} onClick={() => openModal(cell.row.id)}>Edit</button>
+            <button className={styles.button} onClick={() => deleteOrder(cell.row.values.orderNo)}>
               Delete
             </button>
           </div>

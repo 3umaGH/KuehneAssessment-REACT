@@ -16,9 +16,9 @@ const Modal = (props) => {
       <form>
         {Object.entries(formData).map((entry) => {
           return (
-            <div className="form" key={entry[0]}>
-              <label id={'label_' + entry[0]} htmlFor={entry[0]}>
-                {entry[0]}
+            <div key={entry[0]}>
+              <label className={styles.textLabel} id={'label_' + entry[0]} htmlFor={entry[0]}>
+                {entry[0] + ":"}
               </label>
               <br />
               <input
@@ -26,6 +26,7 @@ const Modal = (props) => {
                 type="text"
                 name={entry[0]}
                 value={entry[1]}
+                className={styles.textInput}
                 onChange={handleInputChange}
               />
             </div>
@@ -34,6 +35,7 @@ const Modal = (props) => {
 
         <button
           type="button"
+          className={styles.button}
           onClick={() => {
             props.updateOrder(props.orderInfo.orderNo, formData);
           }}
@@ -42,6 +44,7 @@ const Modal = (props) => {
         </button>
         <button
           type="button"
+          className={styles.button}
           onClick={() => {
             props.deleteOrder(props.orderInfo.orderNo);
             props.closeModal();
