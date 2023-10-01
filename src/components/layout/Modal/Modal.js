@@ -1,6 +1,13 @@
 import styles from "./Modal.module.css";
 import { useState } from "react";
 
+import {Button, TextField, InputLabel, Typography, Box} from "@mui/material";
+
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditSharpIcon from "@mui/icons-material/EditSharp";
+
+
+
 const Modal = (props) => {
   const [formData, setFormData] = useState(props.orderInfo);
 
@@ -10,19 +17,26 @@ const Modal = (props) => {
   };
 
   return (
+    <Box >
     <div className={styles.modal}>
-      <h2>Shipment Information</h2>
+    <Typography variant="h5" component="h1">Shipment Information</Typography>
 
       <form>
         {Object.entries(formData).map((entry) => {
           return (
             <div key={entry[0]}>
-              <label className={styles.textLabel} id={'label_' + entry[0]} htmlFor={entry[0]}>
+              <InputLabel
+                sx={{ m: 1 }}
+                className={styles.textLabel}
+                id={"label_" + entry[0]}
+                htmlFor={entry[0]}
+              >
                 {entry[0] + ":"}
-              </label>
+              </InputLabel>
               <br />
-              <input
-                id={'input_' + entry[0]}
+              <TextField
+                variant="standard"
+                id={"input_" + entry[0]}
                 type="text"
                 name={entry[0]}
                 value={entry[1]}
@@ -33,17 +47,23 @@ const Modal = (props) => {
           );
         })}
 
-        <button
-          type="button"
+        <Button
+          sx={{ m: 2 }}
+          variant="contained"
+          color="success"
+          startIcon={<EditSharpIcon />}
           className={styles.button}
           onClick={() => {
             props.updateOrder(props.orderInfo.orderNo, formData);
           }}
         >
           Edit
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
+          sx={{ m: 2 }}
+          variant="contained"
+          color="error"
+          startIcon={<DeleteIcon />}
           className={styles.button}
           onClick={() => {
             props.deleteOrder(props.orderInfo.orderNo);
@@ -51,11 +71,11 @@ const Modal = (props) => {
           }}
         >
           Delete
-        </button>
+        </Button>
       </form>
     </div>
+    </Box>
   );
 };
-
 
 export default Modal;

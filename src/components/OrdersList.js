@@ -7,6 +7,11 @@ import { useTable } from "react-table";
 import styles from "./OrdersList.module.css";
 import Modal from "./layout/Modal/Modal";
 import Backdrop from "./layout/Modal/Backdrop";
+import { Box, Button } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
+
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditSharpIcon from "@mui/icons-material/EditSharp";
 
 const OrdersList = () => {
   const apiUrl = "https://my.api.mockaroo.com/shipments.json?key=5e0b62d0";
@@ -14,7 +19,7 @@ const OrdersList = () => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [viewingOrderID, setViewingOrderID] = useState(null);
   const [isLoaded, setLoaded] = useState(false);
-  
+
   React.useEffect(() => {
     const dataFetch = async () => {
       fetch(apiUrl)
@@ -99,10 +104,27 @@ const OrdersList = () => {
         Header: "Actions",
         Cell: ({ cell }) => (
           <div className="actions">
-            <button className={styles.button} onClick={() => openModal(cell.row.id)}>Edit</button>
-            <button className={styles.button} onClick={() => deleteOrder(cell.row.values.orderNo)}>
-              Delete
-            </button>
+            <Button
+              style={{ maxWidth: "36px", minWidth: "36px" }}
+              sx={{ m: 0.5 }}
+              variant="contained"
+              color="success"
+              size="small"
+              startIcon={<EditSharpIcon style={{ marginLeft: 9 }} />}
+              className={styles.button}
+              onClick={() => openModal(cell.row.id)}
+            ></Button>
+
+            <Button
+              style={{ maxWidth: "36px", minWidth: "36px" }}
+              sx={{ m: 0.5 }}
+              variant="contained"
+              color="error"
+              size="small"
+              startIcon={<DeleteIcon style={{ marginLeft: 9 }} />}
+              className={styles.button}
+              onClick={() => deleteOrder(cell.row.values.orderNo)}
+            ></Button>
           </div>
         ),
       },
@@ -115,44 +137,47 @@ const OrdersList = () => {
 
   if (isLoaded) {
     return (
-      <div className={styles.center}>
-        <table className={styles.table} {...getTableProps()}>
-          <thead>
-            {headerGroups.map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <th {...column.getHeaderProps()}>
-                    {column.render("Header")}
-                  </th>
-                ))}
-              </tr>
-            ))}
-          </thead>
-
-          <tbody {...getTableBodyProps()}>
-            {rows.map((row) => {
-              prepareRow(row);
-              return (
-                <tr {...row.getRowProps()}>
-                  {row.cells.map((cell) => (
-                    <td {...cell.getCellProps()}> {cell.render("Cell")}</td>
+      /* Should have used MUI Data Grid, but found it too late... */
+      <Box>
+        <div className={styles.center}>
+          <table className={styles.table} {...getTableProps()}>
+            <thead>
+              {headerGroups.map((headerGroup) => (
+                <tr {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map((column) => (
+                    <th {...column.getHeaderProps()}>
+                      {column.render("Header")}
+                    </th>
                   ))}
                 </tr>
-              );
-            })}
-          </tbody>
-        </table>
+              ))}
+            </thead>
 
-        {modalIsOpen && (
-          <Modal
-            orderInfo={data[viewingOrderID]}
-            updateOrder={updateOrder}
-            deleteOrder={deleteOrder}
-            closeModal={closeModal}
-          />
-        )}
-        {modalIsOpen && <Backdrop onClick={closeModal} />}
-      </div>
+            <tbody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row);
+                return (
+                  <tr {...row.getRowProps()}>
+                    {row.cells.map((cell) => (
+                      <td {...cell.getCellProps()}> {cell.render("Cell")}</td>
+                    ))}
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+
+          {modalIsOpen && (
+            <Modal
+              orderInfo={data[viewingOrderID]}
+              updateOrder={updateOrder}
+              deleteOrder={deleteOrder}
+              closeModal={closeModal}
+            />
+          )}
+          {modalIsOpen && <Backdrop onClick={closeModal} />}
+        </div>
+      </Box>
     );
   } else {
     return <div>Loading...</div>;
